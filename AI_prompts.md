@@ -252,3 +252,17 @@ has not.
 
 1. "yes we need to add to the reflection tab. In my voice and vibe, we need to add how would you evaluate the performance of the agents on each ticket and why? for each ticket, how did Actual compare to the expected plan you wrote earlier? what would have been simpler as one agent with tools and why? describe new problems campus customs might face that this agent team could solve with the agents we built? describe 3 new problems campus customs might face that this agent team could not solve with the tools we built and explain the tools and agents we would need to solve them. every answer should be tied to this app and the three tickets we ran, use the ticket tabs and cash tab on the same page as evidence"
 2. "we need actual campus customs details. anything generic will score low. so pay attention to detail"
+
+---
+
+## Problem 11: Submit the repo
+
+**My prompt:** "okay we need to push the code to a public GitHub repo"
+
+**Follow-ups:**
+
+1. "so graders can access and grade it"
+2. "I need to submit the repo to canvas"
+3. "and add it to output/github_url.txt"
+
+**Repo:** https://github.com/theashleyjoyce/campus-customs-multi-agent (public)
