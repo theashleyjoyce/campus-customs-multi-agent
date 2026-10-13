@@ -20,7 +20,7 @@ from typing import Any
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-for folder in (HERE, ROOT / "mcp"):
+for folder in (HERE, ROOT / "mcp_server"):
     if str(folder) not in sys.path:
         sys.path.insert(0, str(folder))
 
@@ -29,7 +29,7 @@ from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from fastapi.responses import StreamingResponse  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
-import mcp_server as shop  # noqa: E402
+import server as shop  # noqa: E402
 from agents import run_board, run_ticket  # noqa: E402
 from audit import AUDIT_PATH  # noqa: E402
 from config import MODEL_NAME  # noqa: E402

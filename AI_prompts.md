@@ -18,7 +18,7 @@ sequentially, one question at a time:
 3. **Problem 2 — Study the Campus Customs database.** Begun once the data was
    in place. Produced `output/harness.md`.
 4. **Problem 3 — Build the MCP server.** Begun after the schema was
-   understood. Produced `mcp/mcp_server.py` and `mcp/README.md`.
+   understood. Produced `mcp_server/server.py` and `mcp_server/README.md`.
 5. **Problem 4 — Add the MCP server to vibe coder and test each tool.**
    Produced `mcp/test_tools.py`, `mcp/smoke.py` and `output/mcp_smoke.json`.
 6. **Problem 5 — Build the agent team and grow the MCP tools.** Produced
@@ -32,7 +32,9 @@ sequentially, one question at a time:
 10. **Problem 9 — Resolve the tickets.** Produced
     `output/resolved_tickets.json`, `output/resolved_board.html`, and the
     filled Actual and Cash sections of `output/desk_tickets.html`.
-11. **Problem 10 — Reflection.**
+11. **Problem 10 — Reflection.** Filled the Reflection tab of
+    `output/desk_tickets.html`.
+12. **Problem 11 — Submit to GitHub.**
 
 ## Problem 1: Vibecoder prompts
 
@@ -84,9 +86,10 @@ of the substitution.
 11. "also, let's add a short mcp_server/README.md file that explains what the mcp server is for, which database file it uses and the three tools in it"
 12. "we can leave it for now, we can fix at the end if the problem suggests a different expected layout"
 
-**Note:** The folder is `mcp/` holding `mcp_server.py` and `README.md`, matching
-the lecture 9 layout. If the final problem's file tree expects `mcp_server/`,
-rename it then.
+**Note:** The folder started as `mcp/` holding `mcp_server.py`, matching the
+lecture 9 layout, with a note to revisit it if the final problem expected
+something else. Problem 11 published the expected file tree, which wants
+`mcp_server/server.py`, so it was renamed then and every reference updated.
 
 ## Problem 4: Add the MCP server to vibe coder and test each tool
 
@@ -255,7 +258,7 @@ has not.
 
 ---
 
-## Problem 11: Submit the repo
+## Problem 11: Submit to GitHub
 
 **My prompt:** "okay we need to push the code to a public GitHub repo"
 
@@ -264,5 +267,7 @@ has not.
 1. "so graders can access and grade it"
 2. "I need to submit the repo to canvas"
 3. "and add it to output/github_url.txt"
+4. "Do not push your real .env to the GitHub repo. Do include both database files under data/ (the original and your working copy) so graders can run your app easily." (from the problem page)
+5. "by the way this is problem 11, it's called Submit to GitHub"
 
 **Repo:** https://github.com/theashleyjoyce/campus-customs-multi-agent (public)

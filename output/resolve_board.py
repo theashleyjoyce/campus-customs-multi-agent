@@ -22,9 +22,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "mcp"))
+sys.path.insert(0, str(ROOT / "mcp_server"))
 
-import mcp_server as shop  # noqa: E402
+import server as shop  # noqa: E402
 
 APPROVER = "Ashley Joyce"
 MAX_PASSES = 4

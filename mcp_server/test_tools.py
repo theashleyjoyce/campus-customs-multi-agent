@@ -2,7 +2,7 @@
 import asyncio, json, sys
 from fastmcp import Client
 
-SERVER = "mcp/mcp_server.py"
+SERVER = "mcp_server/server.py"
 results = []
 
 

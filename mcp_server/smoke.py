@@ -1,12 +1,12 @@
 """Smoke-test the three Campus Customs MCP tools and save the evidence.
 
-Connects to mcp/mcp_server.py as an MCP client over stdio, runs every case in
+Connects to mcp_server/server.py as an MCP client over stdio, runs every case in
 CASES, then checks the reported numbers against the database file with direct
 SQL. Writes everything to output/mcp_smoke.json.
 
 Run with the board reset first:
-    python mcp/mcp_server.py --reset
-    python mcp/smoke.py
+    python mcp_server/server.py --reset
+    python mcp_server/smoke.py
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from fastmcp import Client
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-SERVER = HERE / "mcp_server.py"
+SERVER = HERE / "server.py"
 DB = ROOT / "data" / "campus_customs_new.db"
 OUT = ROOT / "output" / "mcp_smoke.json"
 
@@ -262,7 +262,7 @@ async def main() -> None:
         "client": f"fastmcp Client, python {platform.python_version()}",
         "database": "data/campus_customs_new.db",
         "note": (
-            "Every call below went over the MCP protocol to mcp/mcp_server.py. The board "
+            "Every call below went over the MCP protocol to mcp_server/server.py. The board "
             "was reset first, so the run starts from three open tickets, $3,400 in "
             "checking and invoice 501 unpaid. The database_verification section re-reads "
             "the database file with direct SQL to confirm the tools reported real values."

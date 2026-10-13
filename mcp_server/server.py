@@ -23,9 +23,9 @@ cannot talk its way past them:
   * a payment needs a named human approver
   * a payment that would overdraw the account is refused
 
-Run from this folder (stdio):  python mcp_server.py
-Run (HTTP):                    python mcp_server.py --http
-Reset the working copy:        python mcp_server.py --reset
+Run from this folder (stdio):  python server.py
+Run (HTTP):                    python server.py --http
+Reset the working copy:        python server.py --reset
 HTTP URL:                      http://127.0.0.1:8001/mcp
 """
 

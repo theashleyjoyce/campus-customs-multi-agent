@@ -6,8 +6,9 @@ __pycache__/
 # Secrets. The real key lives in the one .env at the workspace root.
 .env
 
-# The working copy is generated from campus_customs.db by --reset.
-data/campus_customs_new.db
+# Both database files are committed on purpose. The assignment asks for the
+# original and the working copy so a grader can run the app without first
+# having to resolve the board themselves.
 
 # Audit trail is run output, not source. Remove this line if the
 # submission should include a sample run.

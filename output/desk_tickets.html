@@ -214,7 +214,7 @@
   <div class="card actual">
     <h2>Actual</h2>
     <p class="sub">From the resolution run on 2026-10-13, starting from a reset board.
-    Every figure here is read from the database and the audit trail, not typed by hand.</p>
+    Every figure is read from <code>data/campus_customs_new.db</code> and the audit trail.</p>
 
     <div class="record-head" style="margin-bottom:.5rem">
       <h3 style="margin:0">Final status <span class="chip done">closed</span></h3>
@@ -224,22 +224,21 @@
     <h3>Which agents worked it, what they delegated, which tools they used</h3>
     <table class="agents">
       <tr><th>Agent</th><th style="text-align:center">Turns</th><th>Delegated to</th><th>Tools used</th></tr>
-      <tr><td><strong>Boss</strong></td><td style='text-align:center'>19</td><td>Inventory, Accounting, Customer Service</td><td><div class='tools'><code>get_today</code><code>get_ticket</code><code>update_ticket</code></div></td></tr><tr><td><strong>Inventory</strong></td><td style='text-align:center'>19</td><td>Accounting</td><td><div class='tools'><code>check_stock</code><code>check_vendor_for_restock</code><code>get_today</code><code>list_tickets</code><code>get_ticket</code><code>list_invoices</code><code>list_approvals</code></div></td></tr><tr><td><strong>Accounting</strong></td><td style='text-align:center'>15</td><td><span class='muted'>nobody</span></td><td><div class='tools'><code>get_cash_balance</code><code>list_invoices</code><code>get_ticket</code><code>get_today</code><code>request_approval</code><code>check_vendor_for_restock</code><code>list_approvals</code></div></td></tr><tr><td><strong>Customer Service</strong></td><td style='text-align:center'>12</td><td>Inventory, Accounting</td><td><div class='tools'><code>draft_message</code><code>get_ticket</code><code>list_tickets</code></div></td></tr>
+      <tr><td><strong>Boss</strong></td><td style='text-align:center'>19</td><td>Inventory, Accounting, Customer Service</td><td><div class='tools'><code>get_today</code><code>get_ticket</code><code>update_ticket</code><code>list_approvals</code></div></td></tr><tr><td><strong>Accounting</strong></td><td style='text-align:center'>15</td><td><span class='muted'>nobody</span></td><td><div class='tools'><code>get_cash_balance</code><code>get_today</code><code>get_ticket</code><code>list_invoices</code><code>request_approval</code><code>check_vendor_for_restock</code><code>list_approvals</code><code>get_pricing</code><code>check_stock</code></div></td></tr><tr><td><strong>Inventory</strong></td><td style='text-align:center'>12</td><td>Accounting</td><td><div class='tools'><code>check_stock</code><code>check_vendor_for_restock</code><code>get_today</code><code>get_ticket</code><code>list_approvals</code></div></td></tr><tr><td><strong>Customer Service</strong></td><td style='text-align:center'>9</td><td>Inventory, Accounting</td><td><div class='tools'><code>draft_message</code><code>get_ticket</code><code>check_stock</code></div></td></tr>
     </table>
 
     <h3>Human approvals</h3>
-    <ul class="approvals-list"><li><strong>$840.00</strong> invoice (approval #1), <strong>paid</strong>, decided by Ashley Joyce.<br><span class='muted'>Pay overdue Bulldog Print Co invoice for rush reprint CC-TEE-WHITE size S; vendor shipment is blocked and ticket 101 has zero stock.</span></li><li><strong>$8.00</strong> purchase order (approval #3), <strong>paid</strong>, decided by Ashley Joyce.<br><span class='muted'>Purchase 1 unit of CC-TEE-WHITE size S from Bulldog Print Co at the $8 unit cost; needed to fulfill the customer order.</span></li></ul>
+    <ul class="approvals-list"><li><strong>$840.00</strong> invoice (approval #1), <strong>paid</strong>, decided by Ashley Joyce.<br><span class='muted'>Pay overdue Bulldog Print Co invoice to unblock the CC-TEE-WHITE size S restock for customer ticket 101.</span></li><li><strong>$8.00</strong> purchase order (approval #3), <strong>paid</strong>, decided by Ashley Joyce.<br><span class='muted'>Restock 1 CC-TEE-WHITE size S from now-unblocked Bulldog Print Co at recorded unit cost of $8 for customer ticket 101.</span></li></ul>
 
     <h3>What the team concluded</h3>
-    <p class="outcome">Decided to close: CC-TEE-WHITE size S was 0 on hand and short by 1. Invoice 501 to Bulldog Print Co. is paid, so vendor is unblocked. Purchase-order approval #3 for $8 is paid; under policy this is the placed order for 1 tee. Bulldog has a 5-day lead time. Customer-service draft was corrected to state the order is placed and fulfillment follows arrival; nothing was sent. No shop action remains ...</p>
+    <p class="outcome">Decision 2026-08-31: Closed. Stock remains 0 for CC-TEE-WHITE size S, but invoice 501 is paid and Bulldog Print Co is unblocked. The $8 purchase order for 1 unit was approved and paid (approval #3), so the restock is ordered with a 5-day lead time. Customer-service draft is pinned for Tauhid Zaman. No further shop decision/action remains; receive the unit when it arrives.</p>
 
     <h3>Expected versus actual</h3>
     <p class="verdict"><strong>The plan held.</strong> Inventory was called first, Facilities never
-appeared, and Inventory went to Accounting itself rather than handing the blocker back
-up the chain. What the plan missed is that clearing invoice 501 was not the end of it.
-A second approval was needed for the $8 restock order once the vendor unfroze, and the
-ticket needed three passes to close because the team would not claim an order it could
-not see recorded anywhere.</p>
+appeared, and Inventory went to Accounting itself rather than handing the blocker back up
+the chain. What the plan underrated is that clearing invoice 501 unblocks the
+<em>vendor</em>, not the ticket. The shop still had to order the tee afterwards, which
+took a second approval the plan never mentioned.</p>
   </div>
 </section>
 
@@ -296,7 +295,7 @@ not see recorded anywhere.</p>
   <div class="card actual">
     <h2>Actual</h2>
     <p class="sub">From the resolution run on 2026-10-13, starting from a reset board.
-    Every figure here is read from the database and the audit trail, not typed by hand.</p>
+    Every figure is read from <code>data/campus_customs_new.db</code> and the audit trail.</p>
 
     <div class="record-head" style="margin-bottom:.5rem">
       <h3 style="margin:0">Final status <span class="chip done">closed</span></h3>
@@ -306,21 +305,21 @@ not see recorded anywhere.</p>
     <h3>Which agents worked it, what they delegated, which tools they used</h3>
     <table class="agents">
       <tr><th>Agent</th><th style="text-align:center">Turns</th><th>Delegated to</th><th>Tools used</th></tr>
-      <tr><td><strong>Boss</strong></td><td style='text-align:center'>13</td><td>Facilities, Accounting, Customer Service</td><td><div class='tools'><code>get_today</code><code>get_ticket</code><code>update_ticket</code><code>list_approvals</code></div></td></tr><tr><td><strong>Facilities</strong></td><td style='text-align:center'>10</td><td><span class='muted'>nobody</span></td><td><div class='tools'><code>get_lease</code><code>get_today</code><code>get_ticket</code><code>update_ticket</code><code>list_approvals</code></div></td></tr><tr><td><strong>Accounting</strong></td><td style='text-align:center'>7</td><td><span class='muted'>nobody</span></td><td><div class='tools'><code>get_cash_balance</code><code>get_today</code><code>get_lease</code><code>get_ticket</code><code>request_approval</code><code>list_approvals</code></div></td></tr><tr><td><strong>Customer Service</strong></td><td style='text-align:center'>7</td><td>Facilities, Accounting</td><td><div class='tools'><code>draft_message</code><code>get_ticket</code></div></td></tr>
+      <tr><td><strong>Boss</strong></td><td style='text-align:center'>10</td><td>Facilities, Accounting, Customer Service</td><td><div class='tools'><code>get_today</code><code>get_ticket</code><code>update_ticket</code></div></td></tr><tr><td><strong>Accounting</strong></td><td style='text-align:center'>10</td><td><span class='muted'>nobody</span></td><td><div class='tools'><code>get_cash_balance</code><code>get_lease</code><code>list_approvals</code><code>get_today</code><code>request_approval</code><code>get_ticket</code></div></td></tr><tr><td><strong>Facilities</strong></td><td style='text-align:center'>7</td><td>Accounting</td><td><div class='tools'><code>get_lease</code><code>get_today</code></div></td></tr><tr><td><strong>Customer Service</strong></td><td style='text-align:center'>4</td><td>Facilities, Accounting</td><td><div class='tools'><code>draft_message</code></div></td></tr>
     </table>
 
     <h3>Human approvals</h3>
-    <ul class="approvals-list"><li><strong>$2,400.00</strong> rent (approval #2), <strong>paid</strong>, decided by Ashley Joyce.<br><span class='muted'>Pay Chapel Street shop rent due 2026-09-02; ticket 102.</span></li></ul>
+    <ul class="approvals-list"><li><strong>$2,400.00</strong> rent (approval #2), <strong>paid</strong>, decided by Ashley Joyce.<br><span class='muted'>Pay September rent for the Chapel Street shop, due 2026-09-02.</span></li></ul>
 
     <h3>What the team concluded</h3>
-    <p class="outcome">Lease 1 verified: $2,400 rent to Elm City Properties is due 2026-09-02, so it is not late as of 2026-08-31. Human approval by Ashley Joyce was recorded and the rent payment is now paid; checking balance is $160. Customer-service draft confirms payment. Closed because no further shop action remains.</p>
+    <p class="outcome">Rechecked on 2026-08-31: lease 1 rent is $2,400 due 2026-09-02, not late. Accounting confirmed approval request #2 was approved by Ashley Joyce and paid; checking balance is $160. The prior note stating approval was pending/no payment was stale. Rent obligation is complete; no further shop action remains.</p>
 
     <h3>Expected versus actual</h3>
     <p class="verdict"><strong>Mostly held, with one real divergence.</strong> Facilities was called first
 and Inventory never appeared, as predicted. But the plan said two hops would do it, boss
 to facilities to accounting. In practice the boss called Facilities and Accounting in the
-same turn instead of waiting for the hand-off, and pulled in Customer Service too, which
-the plan had marked optional. Four agents worked a ticket the plan sized at two.</p>
+same turn rather than waiting for the hand-off, and pulled in Customer Service as well,
+which the plan had marked optional. Four agents worked a ticket the plan sized at two.</p>
   </div>
 </section>
 
@@ -383,7 +382,7 @@ the plan had marked optional. Four agents worked a ticket the plan sized at two.
   <div class="card actual">
     <h2>Actual</h2>
     <p class="sub">From the resolution run on 2026-10-13, starting from a reset board.
-    Every figure here is read from the database and the audit trail, not typed by hand.</p>
+    Every figure is read from <code>data/campus_customs_new.db</code> and the audit trail.</p>
 
     <div class="record-head" style="margin-bottom:.5rem">
       <h3 style="margin:0">Final status <span class="chip done">closed</span></h3>
@@ -393,112 +392,60 @@ the plan had marked optional. Four agents worked a ticket the plan sized at two.
     <h3>Which agents worked it, what they delegated, which tools they used</h3>
     <table class="agents">
       <tr><th>Agent</th><th style="text-align:center">Turns</th><th>Delegated to</th><th>Tools used</th></tr>
-      <tr><td><strong>Boss</strong></td><td style='text-align:center'>13</td><td>Accounting, Inventory, Customer Service</td><td><div class='tools'><code>get_today</code><code>get_ticket</code><code>update_ticket</code></div></td></tr><tr><td><strong>Accounting</strong></td><td style='text-align:center'>16</td><td><span class='muted'>nobody</span></td><td><div class='tools'><code>quote_discount</code><code>get_today</code><code>get_cash_balance</code><code>list_invoices</code><code>get_ticket</code><code>check_vendor_for_restock</code><code>request_approval</code><code>list_approvals</code><code>get_pricing</code></div></td></tr><tr><td><strong>Inventory</strong></td><td style='text-align:center'>13</td><td>Accounting</td><td><div class='tools'><code>check_stock</code><code>check_vendor_for_restock</code><code>get_ticket</code><code>list_invoices</code><code>list_approvals</code><code>get_today</code></div></td></tr><tr><td><strong>Customer Service</strong></td><td style='text-align:center'>6</td><td>Inventory, Accounting</td><td><div class='tools'><code>get_ticket</code><code>draft_message</code></div></td></tr>
+      <tr><td><strong>Boss</strong></td><td style='text-align:center'>25</td><td>Inventory, Accounting, Customer Service</td><td><div class='tools'><code>get_today</code><code>get_ticket</code><code>list_approvals</code><code>update_ticket</code></div></td></tr><tr><td><strong>Inventory</strong></td><td style='text-align:center'>24</td><td>Accounting</td><td><div class='tools'><code>check_stock</code><code>check_vendor_for_restock</code><code>get_ticket</code><code>get_today</code><code>list_invoices</code><code>list_approvals</code><code>update_ticket</code></div></td></tr><tr><td><strong>Accounting</strong></td><td style='text-align:center'>21</td><td><span class='muted'>nobody</span></td><td><div class='tools'><code>get_ticket</code><code>get_pricing</code><code>quote_discount</code><code>get_cash_balance</code><code>list_invoices</code><code>get_today</code><code>request_approval</code><code>list_approvals</code><code>check_vendor_for_restock</code></div></td></tr><tr><td><strong>Customer Service</strong></td><td style='text-align:center'>14</td><td>Inventory, Accounting</td><td><div class='tools'><code>get_ticket</code><code>draft_message</code><code>list_tickets</code></div></td></tr>
     </table>
 
     <h3>Human approvals</h3>
     <ul class="approvals-list"><li class='muted'>No money was requested on this ticket.</li></ul>
 
     <h3>What the team concluded</h3>
-    <p class="outcome">Decision confirmed: approve the 20% bulk discount for 20 CC-HOOD-NAVY size M hoodies at $46.40 each, $928 total. Cost is $440, preserving $488 total margin. Current stock is 8, leaving a 12-unit shortfall. Bulldog Print Co. can ship the 12-unit restock in 5 days; invoice 501 ($840) is paid and approval #1 was paid by Ashley Joyce, so no human payment approval remains outstanding. Customer-servi...</p>
+    <p class="outcome">Decision 2026-08-31: Quote/approve 15% off for 20 CC-HOOD-NAVY size M at $49.30 each, $986 total; accounting confirms $27.30 margin per unit ($546 total) versus $22 cost, with no payment or approval needed. Inventory confirms 8 on hand and 12 short; Bulldog Print Co. is unblocked and can ship the 12 with a 5-day lead time after order placement. Customer-service draft is pinned and updated with ...</p>
 
     <h3>Expected versus actual</h3>
     <p class="verdict"><strong>Held on who, diverged on the ending.</strong> Inventory was involved and
-Facilities stayed out, as predicted. The discount came back at <strong>20 percent</strong>,
-$46.40 a unit against a $22 cost, keeping $488 of margin and sitting well inside the
-62.1 percent break-even. What the plan did not foresee is that this ticket closes having
-spent nothing at all. By the time the 12-unit restock was considered, the invoice and the
-rent had taken the cash, so the team closed it honestly as a discount agreed on the 8
-units in stock with the rest impossible until there is money.</p>
+Facilities stayed out, as predicted. What the plan did not foresee is that this ticket
+closes having spent nothing at all. The invoice, the rent and the tee order had already
+taken the cash, so the team agreed the discount and closed it honestly on the 8 units in
+stock rather than promising 20.</p>
   </div>
 </section>
 
 <!-- ============================ CASH ============================ -->
 <section class="panel" id="cash">
   <div class="card">
-    <h2>Cash</h2>
-    <p class="sub">Every dollar that moved on the run of 2026-10-13, from the reset to the end.</p>
-    <table>
-      <tr><th>Starting checking balance, after the reset</th><td><strong>$3,400.00</strong></td></tr>
-      <tr><th>Total paid out</th><td>&minus; $3,248.00</td></tr>
-      <tr><th>Ending checking balance</th><td><strong>$152.00</strong></td></tr>
-      <tr><th>Matches <code>cash_accounts</code> in the working database</th><td><strong>Yes, $152.00</strong></td></tr>
+    <h2>Where the money went</h2>
+    <p class="sub">Read from <code>data/campus_customs_new.db</code> by
+    <code>output/cash_reconcile.py</code>. Cash only goes out in this shop, so this is a
+    one way list.</p>
+    <table class="cash">
+      <tr><th>What</th><th class="num">Change</th><th class="num">Balance</th></tr>
+      <tr class="opening"><td>Starting checking balance, after the reset</td><td></td><td class="num"><strong>$3,400.00</strong></td></tr><tr><td>Ticket #101: invoice <span class="muted">Pay overdue Bulldog Print Co invoice to unblock the CC-TEE-WHITE size S restock for c</span></td><td class="num out">-$840.00</td><td class="num">$2,560.00</td></tr><tr><td>Ticket #101: purchase order <span class="muted">Restock 1 CC-TEE-WHITE size S from now-unblocked Bulldog Print Co at recorded unit co</span></td><td class="num out">-$8.00</td><td class="num">$2,552.00</td></tr><tr><td>Ticket #102: rent <span class="muted">Pay September rent for the Chapel Street shop, due 2026-09-02.</span></td><td class="num out">-$2,400.00</td><td class="num">$152.00</td></tr><tr class="closing"><td>Ending checking balance</td><td></td><td class="num"><strong>$152.00</strong></td></tr>
     </table>
+  </div>
+
+  <div class="card expected">
+    <h2>It reconciles</h2>
+    <table>
+      <tr><th>Starting balance, from the untouched original</th><td class="num">$3,400.00</td></tr>
+      <tr><th>Total paid out, summed from the payments table</th><td class="num">-$3,248.00</td></tr>
+      <tr><th>Computed ending balance</th><td class="num"><strong>$152.00</strong></td></tr>
+      <tr><th><code>cash_accounts</code> in the working database says</th><td class="num"><strong>$152.00</strong></td></tr>
+    </table>
+    <p class="verdict" style="margin-top:.8rem">These agree to the cent. The reconciler
+    refuses to emit numbers that do not balance, so a wrong figure cannot be published by
+    accident.</p>
   </div>
 
   <div class="card">
-    <h2>How cash changed, ticket by ticket</h2>
-
-    <h3>Ticket 101, Bulldog tee: &minus;$848.00</h3>
-    <table>
-      <tr><th>Invoice 501</th><td>&minus;$840.00</td></tr>
-      <tr><th>Purchase order, 1 tee at cost</th><td>&minus;$8.00</td></tr>
-      <tr><th>Ticket total</th><td><strong>&minus;$848.00</strong></td></tr>
-    </table>
-    <p><strong>Why.</strong> The tee was out of stock and the only apparel
-    vendor would not ship while invoice 501 sat open and 3 days overdue. Paying
-    it was the price of unblocking the vendor, and it unblocked ticket 103 at
-    the same time. The $8.00 is the tee itself, ordered at unit cost once the
-    vendor was free. Both were approved by a human.</p>
-
-    <h3>Ticket 102, rent: &minus;$2,400.00</h3>
-    <table>
-      <tr><th>Rent on lease 1</th><td>&minus;$2,400.00</td></tr>
-      <tr><th>Ticket total</th><td><strong>&minus;$2,400.00</strong></td></tr>
-    </table>
-    <p><strong>Why.</strong> The lease confirmed the landlord's email. $2,400
-    due 2026-09-02, two days from the shop's today. It was not late, but it was
-    coming, and the shop had the cash. Approved by a human.</p>
-
-    <h3>Ticket 103, bulk hoodies: $0.00</h3>
-    <table>
-      <tr><th>Discount agreed, 15% on 20 hoodies</th><td>$0.00 out</td></tr>
-      <tr><th>Purchase order for the 12 missing hoodies</th><td><strong>denied</strong>, $264.00 never left</td></tr>
-      <tr><th>Ticket total</th><td><strong>$0.00</strong></td></tr>
-    </table>
-    <p><strong>Why.</strong> A discount costs margin, not cash, so agreeing to
-    15% moved no money. The restock would have cost $264.00 at unit cost, but by
-    the time it was asked for, only $160.00 was left. A human denied it. This is
-    the squeeze the data was built around, and it landed exactly where the
-    problem 2 arithmetic said it would.</p>
-  </div>
-
-  <div class="card expected">
-    <h2>Reconciliation</h2>
-    <table>
-      <tr><th>Starting balance</th><td>$3,400.00</td></tr>
-      <tr><th>Ticket 101</th><td>&minus;$848.00</td></tr>
-      <tr><th>Ticket 102</th><td>&minus;$2,400.00</td></tr>
-      <tr><th>Ticket 103</th><td>&minus;$0.00</td></tr>
-      <tr><th>Sum of ticket movements</th><td>&minus;$3,248.00</td></tr>
-      <tr><th>Expected ending balance</th><td>$152.00</td></tr>
-      <tr><th><code>cash_accounts.balance</code></th><td><strong>$152.00</strong></td></tr>
-    </table>
-    <p>Three payments in the <code>payments</code> table, each with a named
-    human approver, and they sum to the difference exactly. Cash only goes out
-    in this shop, so there is nothing on the other side to net off.</p>
-    <table>
-      <tr><th>1</th><td>invoice 501, $840.00, approved by Ashley Joyce</td></tr>
-      <tr><th>2</th><td>rent on lease 1, $2,400.00, approved by Ashley Joyce</td></tr>
-      <tr><th>3</th><td>purchase order for ticket 101, $8.00, approved by Ashley Joyce</td></tr>
-    </table>
-  </div>
-
-  <div class="card expected">
-    <h2>What I expected before the run</h2>
-    <p>I wrote this on the Cash tab at problem 6, before the backend was wired:</p>
-    <table>
-      <tr><th>Opening balance</th><td>$3,400, predicted correctly</td></tr>
-      <tr><th>Invoice 501</th><td>$840, predicted correctly</td></tr>
-      <tr><th>Rent on lease 1</th><td>$2,400, predicted correctly</td></tr>
-      <tr><th>Left afterwards</th><td>I said $160. It came out at $152.</td></tr>
-      <tr><th>Does not fit</th><td>$264 for the hoodies, predicted correctly, and it was denied</td></tr>
-    </table>
-    <p>The $8.00 gap is the one thing I missed. I had not thought the team would
-    order the single tee for ticket 101 as its own purchase order, so my
-    prediction stopped at $160 and the real figure is $152. Everything else
-    landed where the problem 2 arithmetic said it would, including the restock
-    being unaffordable.</p>
+    <h2>Why ticket 103 cost nothing</h2>
+    <p>Ticket 103 resolved without spending a cent. The discount was
+    agreed, but restocking the 12 missing hoodies would have cost $264 at the $22 unit
+    cost, and by then the invoice, the rent and the tee order had taken
+    $3,248.00 of the $3,400.00, leaving
+    $152.00.</p>
+    <p class="verdict">That is the cash squeeze the board was built around. The two
+    obligations fit. The restock does not fit after them, and the shop has no income to
+    recover from it.</p>
   </div>
 </section>
 
@@ -542,11 +489,12 @@ units in stock with the rest impossible until there is money.</p>
     <p>This one resolved having spent <strong>$0.00</strong>, which the Cash tab
     confirms, and I think that is the right outcome rather than a failure.</p>
     <p>Accounting used <code>quote_discount</code> instead of doing percentages
-    in its head, and landed on 20 percent off: $46.40 a unit against a $22 cost,
-    $928 on the order, $488 of margin kept. The break-even on CC-HOOD-NAVY is
-    62.1 percent, so 20 percent is nowhere near the line. Then it worked out that
-    restocking the 12 missing hoodies at $264 did not fit against what was left,
-    and closed the ticket saying so plainly instead of pretending.</p>
+    in its head, and landed on 15 percent off: $49.30 a unit against a $22 cost,
+    $986 on the order, $27.30 of margin a hoodie and $546 across the whole thing.
+    The break-even on CC-HOOD-NAVY is 62.1 percent, so 15 percent is nowhere near
+    the line. Then it worked out that restocking the 12 missing hoodies at $264
+    did not fit against the $152 left, and closed the ticket saying so plainly
+    instead of pretending.</p>
   </div>
 
   <div class="card expected">

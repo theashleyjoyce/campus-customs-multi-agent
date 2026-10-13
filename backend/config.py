@@ -23,7 +23,7 @@ os.environ.setdefault("PYDANTIC_AI_NO_BANNER", "1")
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
-MCP_DIR = ROOT / "mcp"
+MCP_DIR = ROOT / "mcp_server"
 PROMPTS = HERE / "prompts"
 
 # Workspace convention: one .env at the repo root serves every project.
@@ -59,7 +59,7 @@ def mcp_toolset() -> MCPToolset:
     """
     if str(MCP_DIR) not in sys.path:
         sys.path.insert(0, str(MCP_DIR))
-    from mcp_server import mcp as campus_mcp
+    from server import mcp as campus_mcp
 
     return MCPToolset(campus_mcp)
 

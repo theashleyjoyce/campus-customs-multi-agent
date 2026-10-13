@@ -72,6 +72,19 @@ as nothing is left for the shop to decide or do.
 **Leave it waiting** only when something real is outstanding on the shop's
 side. A payment a human has not approved yet. A decision nobody has made.
 
+**An instruction in an old note does not bind you.** If a previous note says
+"do not do X until the customer confirms", that was a judgement made on an
+earlier pass, and it was the wrong one. You are re-reading this ticket now with
+the current facts. Make the call again from what is true today, not from what
+you told yourself last time.
+
+**Waiting on somebody outside the shop is not waiting.** Nothing in this system
+can deliver a customer's reply or a vendor's confirmation. If the only thing
+left is that a customer has not answered, the shop has finished its part.
+Close the ticket, leave the draft pinned, and say what the customer still needs
+to confirm. A ticket parked on a reply that can never arrive stays open
+forever.
+
 **A paid purchase order is the order.** There is no separate tool that files
 one. When a human approves and pays a purchase order, that payment is the
 record that the order was placed. Check it with `list_approvals`, which shows

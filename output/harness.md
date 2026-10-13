@@ -189,7 +189,7 @@ matters too, since cash only goes out and nothing comes back in.
 
 ## Problem 3: Build the MCP server
 
-`mcp/mcp_server.py` is a FastMCP server pointed at
+`mcp_server/server.py` is a FastMCP server pointed at
 `data/campus_customs_new.db`. Every agent on the team calls these three tools.
 No tool invents a value. Where the database has no answer the tool says so and
 returns the rows it does have.
@@ -290,7 +290,7 @@ Verified against the live database, run in order from the opening $3,400:
 After invoice 501 was paid, `check_vendor_for_restock` reported Bulldog Print
 Co as `can_ship: true`, which confirms the chokepoint clears exactly as the
 data predicted. The working copy was reset afterwards with
-`python mcp/mcp_server.py --reset`, so the board is back to three open tickets
+`python mcp_server/server.py --reset`, so the board is back to three open tickets
 and $3,400.
 
 ---
@@ -307,7 +307,7 @@ next to the lecture 9 server that was already there:
   "mcpServers": {
     "campus-customs-ops": {
       "command": "homework/hw5/.venv/bin/python",
-      "args": ["homework/hw5/mcp/mcp_server.py"]
+      "args": ["mcp_server/server.py"]
     }
   }
 }
@@ -318,7 +318,7 @@ the session is restarted and the project server is approved.
 
 ### Testing
 
-`mcp/test_tools.py` connects to the server as a real MCP client over stdio, so
+`mcp_server/test_tools.py` connects to the server as a real MCP client over stdio, so
 the tools are exercised through the protocol rather than imported as Python
 functions. The handshake advertises three tools, and `approved_by` is marked
 required in the schema for `pay_bill`, so the approval rule is visible to any
@@ -327,8 +327,8 @@ agent before it even calls the tool.
 Run it with the board reset first:
 
 ```bash
-python mcp/mcp_server.py --reset
-python mcp/test_tools.py
+python mcp_server/server.py --reset
+python mcp_server/test_tools.py
 ```
 
 All 26 checks pass.
@@ -359,7 +359,7 @@ and stamps one on at return time. All 24 checks pass after the fix.
 
 ### Evidence file
 
-`mcp/smoke.py` runs fifteen prompts through the three tools and writes
+`mcp_server/smoke.py` runs fifteen prompts through the three tools and writes
 `output/mcp_smoke.json`. Each entry records the prompt asked, the tool name,
 the arguments, and the tool output, plus whether the call was expected to be
 accepted or refused.

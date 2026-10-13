@@ -32,7 +32,7 @@ database has no answer the tool says so instead of guessing.
 only when restoring the working copy.
 
 ```bash
-python mcp_server.py --reset
+python server.py --reset
 ```
 
 That puts the shop back to three open tickets, $3,400 in checking and invoice
@@ -103,9 +103,9 @@ is recreated empty on the next connection.
 ## Running it
 
 ```bash
-python mcp_server.py           # stdio, for an agent to attach to
-python mcp_server.py --http    # Streamable HTTP on http://127.0.0.1:8001/mcp
-python mcp_server.py --reset   # restore the working copy, then exit
+python server.py              # stdio, for an agent to attach to
+python server.py --http       # Streamable HTTP on http://127.0.0.1:8001/mcp
+python server.py --reset   # restore the working copy, then exit
 ```
 
 HTTP uses port 8001 so the FastAPI backend keeps 8000.
@@ -116,7 +116,7 @@ needed when running the agent team.
 ## Tests
 
 ```bash
-python mcp_server.py --reset
+python server.py --reset
 python test_tools.py    # 26 checks over the protocol, including every refusal
 python smoke.py         # writes ../output/mcp_smoke.json with full evidence
 ```
