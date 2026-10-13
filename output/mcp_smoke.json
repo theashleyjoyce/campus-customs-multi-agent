@@ -1,11 +1,11 @@
 {
-  "captured_at": "2026-10-11T14:29:56+00:00",
+  "captured_at": "2026-10-13T23:33:42+00:00",
   "server": "campus-customs-ops",
   "registered_in": ".mcp.json at the project root",
   "transport": "stdio",
   "client": "fastmcp Client, python 3.14.7",
   "database": "data/campus_customs_new.db",
-  "note": "Every call below went over the MCP protocol to mcp/mcp_server.py. The board was reset first, so the run starts from three open tickets, $3,400 in checking and invoice 501 unpaid. The database_verification section re-reads the database file with direct SQL to confirm the tools reported real values.",
+  "note": "Every call below went over the MCP protocol to mcp_server/server.py. The board was reset first, so the run starts from three open tickets, $3,400 in checking and invoice 501 unpaid. The database_verification section re-reads the database file with direct SQL to confirm the tools reported real values.",
   "tools_advertised": [
     {
       "name": "check_stock",
@@ -44,22 +44,338 @@
         "amount",
         "approved_by"
       ]
+    },
+    {
+      "name": "get_today",
+      "summary": "The shop's current date, from desk.date_today.",
+      "parameters": [],
+      "required": []
+    },
+    {
+      "name": "list_tickets",
+      "summary": "List tickets on the board.",
+      "parameters": [
+        "status"
+      ],
+      "required": []
+    },
+    {
+      "name": "get_ticket",
+      "summary": "One ticket together with the rows it points at.",
+      "parameters": [
+        "ticket_id"
+      ],
+      "required": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "update_ticket",
+      "summary": "Move a ticket along, or add a line to its notes.",
+      "parameters": [
+        "ticket_id",
+        "status",
+        "note"
+      ],
+      "required": [
+        "ticket_id"
+      ]
+    },
+    {
+      "name": "receive_stock",
+      "summary": "Add units to inventory when a restock actually arrives.",
+      "parameters": [
+        "sku",
+        "size",
+        "qty",
+        "note"
+      ],
+      "required": [
+        "sku",
+        "size",
+        "qty"
+      ]
+    },
+    {
+      "name": "get_cash_balance",
+      "summary": "What the shop can actually spend right now.",
+      "parameters": [
+        "account"
+      ],
+      "required": []
+    },
+    {
+      "name": "list_invoices",
+      "summary": "Vendor bills, aged against the shop's today.",
+      "parameters": [
+        "status"
+      ],
+      "required": []
+    },
+    {
+      "name": "get_pricing",
+      "summary": "Cost, list price and the margin room on a product.",
+      "parameters": [
+        "sku"
+      ],
+      "required": [
+        "sku"
+      ]
+    },
+    {
+      "name": "quote_discount",
+      "summary": "Work out what a proposed discount does to price, margin and total.",
+      "parameters": [
+        "sku",
+        "qty",
+        "discount_pct"
+      ],
+      "required": [
+        "sku",
+        "qty",
+        "discount_pct"
+      ]
+    },
+    {
+      "name": "get_lease",
+      "summary": "Lease terms and how soon the next rent is due.",
+      "parameters": [
+        "lease_id"
+      ],
+      "required": []
+    },
+    {
+      "name": "draft_message",
+      "summary": "Write a draft reply and pin it to a ticket. Nothing is ever sent.",
+      "parameters": [
+        "ticket_id",
+        "to",
+        "subject",
+        "body"
+      ],
+      "required": [
+        "ticket_id",
+        "to",
+        "subject",
+        "body"
+      ]
+    },
+    {
+      "name": "request_approval",
+      "summary": "Put money in front of a human and wait. This spends nothing.",
+      "parameters": [
+        "kind",
+        "ref_id",
+        "amount",
+        "reason",
+        "ticket_id",
+        "requested_by"
+      ],
+      "required": [
+        "kind",
+        "ref_id",
+        "amount",
+        "reason"
+      ]
+    },
+    {
+      "name": "list_approvals",
+      "summary": "The approval queue.",
+      "parameters": [
+        "status"
+      ],
+      "required": []
+    },
+    {
+      "name": "decide_approval",
+      "summary": "Record a human's decision on a pending request. Still spends nothing.",
+      "parameters": [
+        "approval_id",
+        "decision",
+        "decided_by"
+      ],
+      "required": [
+        "approval_id",
+        "decision",
+        "decided_by"
+      ]
     }
   ],
   "summary": {
-    "calls": 15,
-    "passed": 15,
+    "calls": 31,
+    "passed": 31,
     "failed": 0,
     "tools_covered": [
       "check_stock",
       "check_vendor_for_restock",
-      "pay_bill"
+      "decide_approval",
+      "draft_message",
+      "get_cash_balance",
+      "get_lease",
+      "get_pricing",
+      "get_ticket",
+      "get_today",
+      "list_approvals",
+      "list_invoices",
+      "list_tickets",
+      "pay_bill",
+      "quote_discount",
+      "receive_stock",
+      "request_approval",
+      "update_ticket"
     ],
     "chokepoint_cleared": true,
-    "database_checks": 7,
-    "database_checks_matching": 7
+    "database_checks": 9,
+    "database_checks_matching": 9
   },
   "calls": [
+    {
+      "prompt_asked": "What is today for the shop? I do not want to use the real calendar.",
+      "tool_name": "get_today",
+      "tool_arguments": {},
+      "tool_output": {
+        "ok": true,
+        "date_today": "2026-08-31"
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Every overdue check hangs off desk.date_today, which is 2026-08-31, not the real date."
+    },
+    {
+      "prompt_asked": "What is on the board right now?",
+      "tool_name": "list_tickets",
+      "tool_arguments": {
+        "status": "open"
+      },
+      "tool_output": {
+        "ok": true,
+        "today": "2026-08-31",
+        "count": 3,
+        "tickets": [
+          {
+            "id": 101,
+            "type": "customer_order",
+            "requester": "Tauhid Zaman",
+            "subject": "Bulldog tee",
+            "sku": "CC-TEE-WHITE",
+            "size": "S",
+            "qty": 1,
+            "lease_id": null,
+            "invoice_id": 501,
+            "status": "open",
+            "notes": "Needs a tee in size S.",
+            "created_at": "2026-08-31T09:15:00-04:00"
+          },
+          {
+            "id": 102,
+            "type": "rent_notice",
+            "requester": "Elm City Properties",
+            "subject": "Rent due",
+            "sku": null,
+            "size": null,
+            "qty": null,
+            "lease_id": 1,
+            "invoice_id": null,
+            "status": "open",
+            "notes": "Email: shop rent due in 2 days.",
+            "created_at": "2026-08-31T11:05:00-04:00"
+          },
+          {
+            "id": 103,
+            "type": "price_override",
+            "requester": "Yale AI Club",
+            "subject": "Bulk hoodie discount",
+            "sku": "CC-HOOD-NAVY",
+            "size": "M",
+            "qty": 20,
+            "lease_id": null,
+            "invoice_id": null,
+            "status": "open",
+            "notes": "Student org wants 20 hoodies, size M, asking for a bulk discount.",
+            "created_at": "2026-08-31T16:55:00-04:00"
+          }
+        ],
+        "note": null
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Three open tickets: the tee, the rent and the hoodie discount."
+    },
+    {
+      "prompt_asked": "Show me ticket 101 and everything it touches.",
+      "tool_name": "get_ticket",
+      "tool_arguments": {
+        "ticket_id": 101
+      },
+      "tool_output": {
+        "ok": true,
+        "today": "2026-08-31",
+        "ticket": {
+          "id": 101,
+          "type": "customer_order",
+          "requester": "Tauhid Zaman",
+          "subject": "Bulldog tee",
+          "sku": "CC-TEE-WHITE",
+          "size": "S",
+          "qty": 1,
+          "lease_id": null,
+          "invoice_id": 501,
+          "status": "open",
+          "notes": "Needs a tee in size S.",
+          "created_at": "2026-08-31T09:15:00-04:00"
+        },
+        "linked": {
+          "invoice": {
+            "id": 501,
+            "vendor_id": 1,
+            "amount": 840.0,
+            "due_date": "2026-08-28",
+            "status": "open",
+            "description": "Rush reprint CC-TEE-WHITE S",
+            "days_overdue": 3
+          },
+          "invoice_vendor": {
+            "id": 1,
+            "name": "Bulldog Print Co",
+            "specialty": "apparel reprint",
+            "lead_days": 5
+          },
+          "pricing": {
+            "sku": "CC-TEE-WHITE",
+            "unit_cost": 8.0,
+            "list_price": 28.0
+          },
+          "stock": {
+            "sku": "CC-TEE-WHITE",
+            "name": "Classic Bulldog Tee",
+            "size": "S",
+            "qty": 0,
+            "location": "Aisle B"
+          }
+        }
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "One call returns the linked invoice, vendor, price and stock rows, which is where the real problem lives."
+    },
+    {
+      "prompt_asked": "Show me ticket 999.",
+      "tool_name": "get_ticket",
+      "tool_arguments": {
+        "ticket_id": 999
+      },
+      "tool_output": {
+        "ok": false,
+        "reason": "The database has no ticket with id 999."
+      },
+      "expected": "refuse",
+      "outcome": "refused",
+      "passed": true,
+      "why_this_matters": "A ticket that is not in the database is refused rather than invented."
+    },
     {
       "prompt_asked": "Ticket 101: Tauhid Zaman wants one Bulldog tee in size S. Do we have it?",
       "tool_name": "check_stock",
@@ -84,7 +400,7 @@
       "expected": "accept",
       "outcome": "accepted",
       "passed": true,
-      "why_this_matters": "Stock is 0, so the shop is short by 1 and the ticket cannot be filled from the shelf."
+      "why_this_matters": "Stock is 0, so the shop is short by 1 and cannot fill it from the shelf."
     },
     {
       "prompt_asked": "Ticket 103: Yale AI Club wants 20 navy hoodies in size M. How many do we have?",
@@ -135,24 +451,6 @@
       "outcome": "refused",
       "passed": true,
       "why_this_matters": "A size the shop does not carry is refused, and the real sizes are listed back."
-    },
-    {
-      "prompt_asked": "How many units of sku NOPE are in stock?",
-      "tool_name": "check_stock",
-      "tool_arguments": {
-        "sku": "NOPE",
-        "size": "S",
-        "qty_wanted": 1
-      },
-      "tool_output": {
-        "sku": "NOPE",
-        "ok": false,
-        "reason": "The database has no product with sku 'NOPE'."
-      },
-      "expected": "refuse",
-      "outcome": "refused",
-      "passed": true,
-      "why_this_matters": "An unknown sku is refused rather than answered with an invented number."
     },
     {
       "prompt_asked": "Ticket 101: the tee is out of stock. Who can reprint it, and will they ship?",
@@ -209,7 +507,7 @@
       "expected": "accept",
       "outcome": "accepted",
       "passed": true,
-      "why_this_matters": "Bulldog Print Co is the 5 day apparel reprinter but is blocked by open invoice 501, 3 days overdue against the shop date of 2026-08-31."
+      "why_this_matters": "Bulldog Print Co is the 5 day apparel reprinter but is blocked by open invoice 501, 3 days overdue."
     },
     {
       "prompt_asked": "Which vendor restocks sku NOPE?",
@@ -269,46 +567,342 @@
       "why_this_matters": "An unknown sku is refused. This exact case caught a real bug on the first run."
     },
     {
+      "prompt_asked": "How much can the shop actually spend?",
+      "tool_name": "get_cash_balance",
+      "tool_arguments": {
+        "account": "checking"
+      },
+      "tool_output": {
+        "ok": true,
+        "account": "checking",
+        "balance": 3400.0,
+        "as_of": "2026-08-31"
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Checking holds $3,400 and nothing comes in, so this is the ceiling on everything."
+    },
+    {
+      "prompt_asked": "What bills are open, and how late are they?",
+      "tool_name": "list_invoices",
+      "tool_arguments": {
+        "status": "open"
+      },
+      "tool_output": {
+        "ok": true,
+        "today": "2026-08-31",
+        "count": 1,
+        "invoices": [
+          {
+            "id": 501,
+            "vendor_id": 1,
+            "amount": 840.0,
+            "due_date": "2026-08-28",
+            "status": "open",
+            "description": "Rush reprint CC-TEE-WHITE S",
+            "days_overdue": 3,
+            "is_overdue": true,
+            "vendor_name": "Bulldog Print Co"
+          }
+        ]
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Invoice 501 for $840 is 3 days overdue, which is what freezes the apparel vendor."
+    },
+    {
+      "prompt_asked": "What does a navy hoodie cost us and what do we sell it for?",
+      "tool_name": "get_pricing",
+      "tool_arguments": {
+        "sku": "CC-HOOD-NAVY"
+      },
+      "tool_output": {
+        "ok": true,
+        "sku": "CC-HOOD-NAVY",
+        "unit_cost": 22.0,
+        "list_price": 58.0,
+        "margin_per_unit": 36.0,
+        "margin_pct_of_list": 62.1
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "$22 cost against $58 list, so $36 of margin a unit and a 62.1 percent break-even."
+    },
+    {
+      "prompt_asked": "Ticket 103: what does 15 percent off 20 hoodies do to our margin?",
+      "tool_name": "quote_discount",
+      "tool_arguments": {
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20,
+        "discount_pct": 15
+      },
+      "tool_output": {
+        "ok": true,
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20,
+        "discount_pct": 15.0,
+        "unit_cost": 22.0,
+        "list_price": 58.0,
+        "discounted_unit_price": 49.3,
+        "margin_per_unit": 27.3,
+        "total_at_list": 1160.0,
+        "total_discounted": 986.0,
+        "total_margin": 546.0,
+        "below_cost": false,
+        "max_discount_pct_at_cost": 62.1
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Arithmetic from the tool rather than a guess, including how far it sits from break-even."
+    },
+    {
+      "prompt_asked": "What if we gave them 70 percent off?",
+      "tool_name": "quote_discount",
+      "tool_arguments": {
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20,
+        "discount_pct": 70
+      },
+      "tool_output": {
+        "ok": true,
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20,
+        "discount_pct": 70.0,
+        "unit_cost": 22.0,
+        "list_price": 58.0,
+        "discounted_unit_price": 17.4,
+        "margin_per_unit": -4.6,
+        "total_at_list": 1160.0,
+        "total_discounted": 348.0,
+        "total_margin": -92.0,
+        "below_cost": true,
+        "max_discount_pct_at_cost": 62.1
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Past the 62.1 percent break-even, so below_cost comes back true. Volume multiplies a negative margin."
+    },
+    {
+      "prompt_asked": "Ticket 102: the landlord says rent is due in two days. Is that right?",
+      "tool_name": "get_lease",
+      "tool_arguments": {
+        "lease_id": 1
+      },
+      "tool_output": {
+        "ok": true,
+        "today": "2026-08-31",
+        "count": 1,
+        "leases": [
+          {
+            "id": 1,
+            "space_name": "Chapel Street shop",
+            "landlord": "Elm City Properties",
+            "monthly_rent": 2400.0,
+            "next_due": "2026-09-02",
+            "notes": null,
+            "days_until_due": 2,
+            "is_overdue": false
+          }
+        ]
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Lease 1 confirms $2,400 due 2026-09-02, two days out. The email is a claim, the lease is the fact."
+    },
+    {
+      "prompt_asked": "Show me lease 9999.",
+      "tool_name": "get_lease",
+      "tool_arguments": {
+        "lease_id": 9999
+      },
+      "tool_output": {
+        "ok": false,
+        "reason": "The database has no lease with id 9999."
+      },
+      "expected": "refuse",
+      "outcome": "refused",
+      "passed": true,
+      "why_this_matters": "A lease that does not exist is refused rather than assumed."
+    },
+    {
       "prompt_asked": "Just pay invoice 501 for $840 so the vendor unblocks.",
       "tool_name": "pay_bill",
       "tool_arguments": {
         "kind": "invoice",
         "ref_id": 501,
         "amount": 840.0,
-        "approved_by": ""
-      },
-      "tool_output": {
-        "ok": false,
-        "reason": "Refused: this payment has no named human approver. Ask for approval on the dashboard, then call this again with that person's name."
-      },
-      "expected": "refuse",
-      "outcome": "refused",
-      "passed": true,
-      "why_this_matters": "Human approval rule: no named approver means no payment."
-    },
-    {
-      "prompt_asked": "Ashley approved it, pay $99,999 against the lease.",
-      "tool_name": "pay_bill",
-      "tool_arguments": {
-        "kind": "rent",
-        "ref_id": 1,
-        "amount": 99999.0,
         "approved_by": "Ashley Joyce"
       },
       "tool_output": {
-        "balance": 3400.0,
-        "amount": 99999.0,
-        "short_by": 96599.0,
+        "approval_status": "missing",
         "ok": false,
-        "reason": "Refused: checking holds $3,400.00 but this payment is $99,999.00. The shop does not run a negative balance."
+        "reason": "Refused: no approved request exists for invoice 501. Call request_approval first and wait for a human to approve it."
       },
       "expected": "refuse",
       "outcome": "refused",
       "passed": true,
-      "why_this_matters": "No negative balances: $99,999 against a $3,400 account is turned down."
+      "why_this_matters": "A typed name is not authorisation. There is no approval record, so no money moves."
     },
     {
-      "prompt_asked": "Pay just $1 toward invoice 501, Ashley approved it.",
+      "prompt_asked": "Ask a human to approve paying invoice 501 so the tee can be reprinted.",
+      "tool_name": "request_approval",
+      "tool_arguments": {
+        "kind": "invoice",
+        "ref_id": 501,
+        "amount": 840.0,
+        "reason": "Unblock Bulldog Print Co so the CC-TEE-WHITE reprint can ship",
+        "ticket_id": 101,
+        "requested_by": "accounting"
+      },
+      "tool_output": {
+        "ok": true,
+        "approval_id": 1,
+        "status": "pending",
+        "kind": "invoice",
+        "ref_id": 501,
+        "amount": 840.0,
+        "reason": "Unblock Bulldog Print Co so the CC-TEE-WHITE reprint can ship",
+        "ticket_id": 101,
+        "requested_by": "accounting",
+        "requested_at": "2026-08-31",
+        "cash_if_approved": 2560.0,
+        "note": "Nothing has been paid. A human decides this on the dashboard."
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Records a pending request and shows what the balance would be. Spends nothing."
+    },
+    {
+      "prompt_asked": "Another agent reaches the same conclusion and asks again for the same bill.",
+      "tool_name": "request_approval",
+      "tool_arguments": {
+        "kind": "invoice",
+        "ref_id": 501,
+        "amount": 840.0,
+        "reason": "Same bill, different agent",
+        "ticket_id": 103,
+        "requested_by": "inventory"
+      },
+      "tool_output": {
+        "ok": true,
+        "duplicate": true,
+        "approval_id": 1,
+        "status": "pending",
+        "kind": "invoice",
+        "ref_id": 501,
+        "amount": 840.0,
+        "reason": "Unblock Bulldog Print Co so the CC-TEE-WHITE reprint can ship",
+        "ticket_id": 101,
+        "requested_by": "accounting",
+        "requested_at": "2026-08-31",
+        "note": "A request for invoice 501 is already pending as approval 1. Reusing it rather than asking a human to approve the same money twice."
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Returns the existing request with duplicate true. A human must not approve the same money twice."
+    },
+    {
+      "prompt_asked": "What is waiting on a human right now?",
+      "tool_name": "list_approvals",
+      "tool_arguments": {
+        "status": "pending"
+      },
+      "tool_output": {
+        "ok": true,
+        "today": "2026-08-31",
+        "count": 1,
+        "approvals": [
+          {
+            "id": 1,
+            "ticket_id": 101,
+            "kind": "invoice",
+            "ref_id": 501,
+            "amount": 840.0,
+            "reason": "Unblock Bulldog Print Co so the CC-TEE-WHITE reprint can ship",
+            "requested_by": "accounting",
+            "requested_at": "2026-08-31",
+            "status": "pending",
+            "decided_by": null,
+            "decided_at": null
+          }
+        ]
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "One request, not two, because the duplicate was folded into the first."
+    },
+    {
+      "prompt_asked": "Pay it now, the approval exists.",
+      "tool_name": "pay_bill",
+      "tool_arguments": {
+        "kind": "invoice",
+        "ref_id": 501,
+        "amount": 840.0,
+        "approved_by": "Ashley Joyce"
+      },
+      "tool_output": {
+        "approval_id": 1,
+        "approval_status": "pending",
+        "ok": false,
+        "reason": "Refused: approval 1 for this invoice is still pending. A human has to decide it before it can be paid."
+      },
+      "expected": "refuse",
+      "outcome": "refused",
+      "passed": true,
+      "why_this_matters": "A pending request is not an approved one. A person still has to decide it."
+    },
+    {
+      "prompt_asked": "Approve it, but without saying who approved it.",
+      "tool_name": "decide_approval",
+      "tool_arguments": {
+        "approval_id": 1,
+        "decision": "approved",
+        "decided_by": ""
+      },
+      "tool_output": {
+        "ok": false,
+        "reason": "A decision needs the name of the person making it."
+      },
+      "expected": "refuse",
+      "outcome": "refused",
+      "passed": true,
+      "why_this_matters": "A decision needs the name of the person making it."
+    },
+    {
+      "prompt_asked": "Ashley Joyce approves paying invoice 501.",
+      "tool_name": "decide_approval",
+      "tool_arguments": {
+        "approval_id": 1,
+        "decision": "approved",
+        "decided_by": "Ashley Joyce"
+      },
+      "tool_output": {
+        "ok": true,
+        "approval_id": 1,
+        "status": "approved",
+        "decided_by": "Ashley Joyce",
+        "decided_at": "2026-08-31",
+        "kind": "invoice",
+        "ref_id": 501,
+        "amount": 840.0,
+        "note": "Approved. pay_bill can now be called with approved_by='Ashley Joyce'."
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "The human step. Still spends nothing, but now pay_bill has a real approver."
+    },
+    {
+      "prompt_asked": "Pay just $1 toward invoice 501 now that it is approved.",
       "tool_name": "pay_bill",
       "tool_arguments": {
         "kind": "invoice",
@@ -328,25 +922,7 @@
       "why_this_matters": "An $840 debt must not clear for $1, which would unblock the vendor for free."
     },
     {
-      "prompt_asked": "Pay the $2,400 rent on lease 9999, Ashley approved.",
-      "tool_name": "pay_bill",
-      "tool_arguments": {
-        "kind": "rent",
-        "ref_id": 9999,
-        "amount": 2400.0,
-        "approved_by": "Ashley Joyce"
-      },
-      "tool_output": {
-        "ok": false,
-        "reason": "The database has no lease with id 9999."
-      },
-      "expected": "refuse",
-      "outcome": "refused",
-      "passed": true,
-      "why_this_matters": "Money must not leave against a lease that is not in the database."
-    },
-    {
-      "prompt_asked": "Ashley Joyce approved paying invoice 501 for $840. Pay it.",
+      "prompt_asked": "Pay invoice 501 properly, approved by Ashley Joyce.",
       "tool_name": "pay_bill",
       "tool_arguments": {
         "kind": "invoice",
@@ -370,25 +946,7 @@
       "expected": "accept",
       "outcome": "accepted",
       "passed": true,
-      "why_this_matters": "With approval and the right amount, invoice 501 is paid. Balance $3,400 to $2,560 and the invoice flips to paid."
-    },
-    {
-      "prompt_asked": "Pay invoice 501 for $840 again, approved by Ashley Joyce.",
-      "tool_name": "pay_bill",
-      "tool_arguments": {
-        "kind": "invoice",
-        "ref_id": 501,
-        "amount": 840.0,
-        "approved_by": "Ashley Joyce"
-      },
-      "tool_output": {
-        "ok": false,
-        "reason": "Invoice 501 is already paid."
-      },
-      "expected": "refuse",
-      "outcome": "refused",
-      "passed": true,
-      "why_this_matters": "The same invoice cannot be paid twice."
+      "why_this_matters": "Balance $3,400 to $2,560, the invoice flips to paid, and the approval closes to paid."
     },
     {
       "prompt_asked": "Invoice 501 is paid now. Can Bulldog Print Co ship the tee reprint?",
@@ -435,90 +993,147 @@
       "expected": "accept",
       "outcome": "accepted",
       "passed": true,
-      "why_this_matters": "The vendor can ship again, so one approved payment unblocks tickets 101 and 103 together."
+      "why_this_matters": "can_ship flips to true. One approved payment unblocks tickets 101 and 103 together."
     },
     {
-      "prompt_asked": "Ticket 102: Ashley Joyce approved the $2,400 rent on the Chapel Street lease. Pay it.",
-      "tool_name": "pay_bill",
+      "prompt_asked": "Ask again for invoice 501 now that it is settled.",
+      "tool_name": "request_approval",
       "tool_arguments": {
-        "kind": "rent",
-        "ref_id": 1,
-        "amount": 2400.0,
-        "approved_by": "Ashley Joyce"
+        "kind": "invoice",
+        "ref_id": 501,
+        "amount": 840.0,
+        "reason": "Already settled",
+        "ticket_id": 101
       },
       "tool_output": {
-        "ok": true,
-        "payment_id": 2,
-        "kind": "rent",
-        "ref_id": 1,
-        "amount": 2400.0,
-        "account": "checking",
-        "paid_at": "2026-08-31",
-        "approved_by": "Ashley Joyce",
-        "balance_before": 2560.0,
-        "balance_after": 160.0,
-        "invoice_marked_paid": false
-      },
-      "expected": "accept",
-      "outcome": "accepted",
-      "passed": true,
-      "why_this_matters": "Rent on ticket 102 is paid. Balance $2,560 to $160."
-    },
-    {
-      "prompt_asked": "Ticket 103: Ashley approved a $264 purchase order for the 12 missing hoodies. Place it.",
-      "tool_name": "pay_bill",
-      "tool_arguments": {
-        "kind": "purchase_order",
-        "ref_id": 1,
-        "amount": 264.0,
-        "approved_by": "Ashley Joyce"
-      },
-      "tool_output": {
-        "balance": 160.0,
-        "amount": 264.0,
-        "short_by": 104.0,
+        "approval_id": 1,
+        "already_paid": true,
         "ok": false,
-        "reason": "Refused: checking holds $160.00 but this payment is $264.00. The shop does not run a negative balance."
+        "reason": "This invoice was already paid under approval 1. There is nothing left to approve."
       },
       "expected": "refuse",
       "outcome": "refused",
       "passed": true,
-      "why_this_matters": "The restock costs $264 but only $160 is left, so it is refused rather than overdrawing."
+      "why_this_matters": "A paid bill cannot be re-requested. Without this an agent could get rent approved twice."
+    },
+    {
+      "prompt_asked": "The tee reprint arrived. Put one back on the shelf.",
+      "tool_name": "receive_stock",
+      "tool_arguments": {
+        "sku": "CC-TEE-WHITE",
+        "size": "S",
+        "qty": 1,
+        "note": "Reprint from Bulldog Print Co"
+      },
+      "tool_output": {
+        "ok": true,
+        "sku": "CC-TEE-WHITE",
+        "size": "S",
+        "was": 0,
+        "now": 1,
+        "received": 1,
+        "note": "Reprint from Bulldog Print Co"
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Stock goes 0 to 1. Only called when units are genuinely in hand, since ordering is not receiving."
+    },
+    {
+      "prompt_asked": "Add minus five hoodies.",
+      "tool_name": "receive_stock",
+      "tool_arguments": {
+        "sku": "CC-HOOD-NAVY",
+        "size": "M",
+        "qty": -5
+      },
+      "tool_output": {
+        "qty": -5,
+        "ok": false,
+        "reason": "Quantity must be greater than zero."
+      },
+      "expected": "refuse",
+      "outcome": "refused",
+      "passed": true,
+      "why_this_matters": "A negative delivery is refused, so stock cannot be quietly written down through this path."
+    },
+    {
+      "prompt_asked": "Write to Tauhid about his tee.",
+      "tool_name": "draft_message",
+      "tool_arguments": {
+        "ticket_id": 101,
+        "to": "Tauhid Zaman",
+        "subject": "Your Bulldog tee",
+        "body": "Your tee in size S is on its way to us and we will confirm as soon as it lands."
+      },
+      "tool_output": {
+        "ok": true,
+        "sent": false,
+        "ticket_id": 101,
+        "to": "Tauhid Zaman",
+        "subject": "Your Bulldog tee",
+        "body": "Your tee in size S is on its way to us and we will confirm as soon as it lands.",
+        "note": "Draft only. Nothing was sent to anyone."
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Comes back with sent false. The shop never emails anyone in this assignment."
+    },
+    {
+      "prompt_asked": "Close ticket 101, the tee is ordered.",
+      "tool_name": "update_ticket",
+      "tool_arguments": {
+        "ticket_id": 101,
+        "status": "closed",
+        "note": "Smoke test: invoice paid, reprint ordered and received."
+      },
+      "tool_output": {
+        "ok": true,
+        "ticket_id": 101,
+        "was_status": "open",
+        "status": "closed",
+        "notes": "Needs a tee in size S. | Smoke test: invoice paid, reprint ordered and received."
+      },
+      "expected": "accept",
+      "outcome": "accepted",
+      "passed": true,
+      "why_this_matters": "Moves the ticket on and appends to its notes, which is the decision record a human reads."
     }
   ],
   "database_verification": [
-    {
-      "what": "CC-TEE-WHITE size S on hand",
-      "reported_by_tool": 0,
-      "actual_in_database": 0,
-      "matches": true,
-      "sql": "SELECT qty FROM inventory WHERE sku = ? AND size = ?"
-    },
     {
       "what": "CC-HOOD-NAVY size M on hand",
       "reported_by_tool": 8,
       "actual_in_database": 8,
       "matches": true,
-      "sql": "SELECT qty FROM inventory WHERE sku = ? AND size = ?"
+      "sql": "SELECT qty FROM inventory WHERE sku=? AND size=?"
     },
     {
-      "what": "invoice 501 status after the approved payment",
+      "what": "CC-TEE-WHITE size S after the delivery",
+      "reported_by_tool": 1,
+      "actual_in_database": 1,
+      "matches": true,
+      "sql": "SELECT qty FROM inventory WHERE sku=? AND size=?"
+    },
+    {
+      "what": "checking balance after the approved payment",
+      "reported_by_tool": 2560.0,
+      "actual_in_database": 2560.0,
+      "matches": true,
+      "sql": "SELECT balance FROM cash_accounts WHERE name='checking'"
+    },
+    {
+      "what": "invoice 501 status",
       "reported_by_tool": "paid",
       "actual_in_database": "paid",
       "matches": true,
-      "sql": "SELECT status FROM invoices WHERE id = ?"
+      "sql": "SELECT status FROM invoices WHERE id=?"
     },
     {
-      "what": "checking balance after both approved payments",
-      "reported_by_tool": 160.0,
-      "actual_in_database": 160.0,
-      "matches": true,
-      "sql": "SELECT balance FROM cash_accounts WHERE name = 'checking'"
-    },
-    {
-      "what": "rows written to payments, one per approved payment",
-      "reported_by_tool": 2,
-      "actual_in_database": 2,
+      "what": "rows written to payments",
+      "reported_by_tool": 1,
+      "actual_in_database": 1,
       "matches": true,
       "sql": "SELECT COUNT(*) AS n FROM payments"
     },
@@ -534,355 +1149,25 @@
       "sql": "SELECT DISTINCT approved_by FROM payments"
     },
     {
-      "what": "Bulldog Print Co has no open invoices left",
+      "what": "the approval closed to paid",
+      "reported_by_tool": "paid",
+      "actual_in_database": "paid",
+      "matches": true,
+      "sql": "SELECT status FROM approvals WHERE id=1"
+    },
+    {
+      "what": "open invoices left for Bulldog Print Co",
       "reported_by_tool": 0,
       "actual_in_database": 0,
       "matches": true,
-      "sql": "SELECT COUNT(*) AS n FROM invoices WHERE vendor_id = 1 AND lower(status) = 'open'"
-    }
-  ],
-  "claude_code_run": {
-    "captured_at": "2026-10-11T14:34:46+00:00",
-    "how": "These calls were made by Claude Code itself, as native MCP tool calls through the campus-customs-ops server registered in .mcp.json. Tool names carry the mcp__campus-customs-ops__ prefix Claude Code assigns, which is what distinguishes this run from the protocol-level run above.",
-    "board_state_at_start": "reset: 3 open tickets, $3,400 in checking, invoice 501 unpaid",
-    "summary": {
-      "calls": 9,
-      "passed": 9,
-      "failed": 0,
-      "tools_covered": [
-        "mcp__campus-customs-ops__check_stock",
-        "mcp__campus-customs-ops__check_vendor_for_restock",
-        "mcp__campus-customs-ops__pay_bill"
-      ],
-      "chokepoint_cleared": true,
-      "database_checks": 7,
-      "database_checks_matching": 7
+      "sql": "SELECT COUNT(*) AS n FROM invoices WHERE vendor_id=1 AND lower(status)='open'"
     },
-    "calls": [
-      {
-        "prompt_asked": "Ticket 101: Tauhid Zaman wants one Bulldog tee in size S. Do we have it?",
-        "tool_name": "mcp__campus-customs-ops__check_stock",
-        "tool_arguments": {
-          "sku": "CC-TEE-WHITE",
-          "size": "S",
-          "qty_wanted": 1
-        },
-        "tool_output": {
-          "ok": true,
-          "sku": "CC-TEE-WHITE",
-          "product_name": "Classic Bulldog Tee",
-          "size": "S",
-          "on_hand": 0,
-          "location": "Aisle B",
-          "in_stock": false,
-          "qty_wanted": 1,
-          "short_by": 1,
-          "can_fill_now": false,
-          "note": "0 on hand against 1 requested, short by 1."
-        },
-        "expected": "accept",
-        "outcome": "accepted",
-        "passed": true,
-        "why_this_matters": "Stock is 0, so ticket 101 cannot be filled from the shelf."
-      },
-      {
-        "prompt_asked": "Ticket 103: Yale AI Club wants 20 navy hoodies in size M. How many do we have?",
-        "tool_name": "mcp__campus-customs-ops__check_stock",
-        "tool_arguments": {
-          "sku": "CC-HOOD-NAVY",
-          "size": "M",
-          "qty_wanted": 20
-        },
-        "tool_output": {
-          "ok": true,
-          "sku": "CC-HOOD-NAVY",
-          "product_name": "Basic Hoodie Big Yale",
-          "size": "M",
-          "on_hand": 8,
-          "location": "Aisle A",
-          "in_stock": true,
-          "qty_wanted": 20,
-          "short_by": 12,
-          "can_fill_now": false,
-          "note": "8 on hand against 20 requested, short by 12."
-        },
-        "expected": "accept",
-        "outcome": "accepted",
-        "passed": true,
-        "why_this_matters": "Stock is 8 against 20 requested, so the shop is short by 12."
-      },
-      {
-        "prompt_asked": "Ticket 101: the tee is out of stock. Who can reprint it, and will they ship?",
-        "tool_name": "mcp__campus-customs-ops__check_vendor_for_restock",
-        "tool_arguments": {
-          "sku": "CC-TEE-WHITE"
-        },
-        "tool_output": {
-          "ok": true,
-          "today": "2026-08-31",
-          "sku": "CC-TEE-WHITE",
-          "product_name": "Classic Bulldog Tee",
-          "vendors": [
-            {
-              "id": 1,
-              "name": "Bulldog Print Co",
-              "specialty": "apparel reprint",
-              "lead_days": 5,
-              "can_ship": false,
-              "open_invoices": [
-                {
-                  "id": 501,
-                  "vendor_id": 1,
-                  "amount": 840,
-                  "due_date": "2026-08-28",
-                  "status": "open",
-                  "description": "Rush reprint CC-TEE-WHITE S",
-                  "days_overdue": 3
-                }
-              ],
-              "blocked_reason": "Bulldog Print Co holds open invoice(s) 501 totalling $840.00. They will not ship new product until this is paid."
-            },
-            {
-              "id": 2,
-              "name": "Elm City Gifts",
-              "specialty": "mugs and small goods",
-              "lead_days": 3,
-              "open_invoices": [],
-              "can_ship": true,
-              "blocked_reason": null
-            },
-            {
-              "id": 3,
-              "name": "QuickShip CT",
-              "specialty": "local courier",
-              "lead_days": 1,
-              "open_invoices": [],
-              "can_ship": true,
-              "blocked_reason": null
-            }
-          ],
-          "note": "No column links a sku to a vendor. Choose using each vendor's specialty, and only from vendors where can_ship is true."
-        },
-        "expected": "accept",
-        "outcome": "accepted",
-        "passed": true,
-        "why_this_matters": "Bulldog Print Co is the only apparel reprinter and is blocked by invoice 501, 3 days overdue."
-      },
-      {
-        "prompt_asked": "Just pay invoice 501 for $840 so the vendor unblocks.",
-        "tool_name": "mcp__campus-customs-ops__pay_bill",
-        "tool_arguments": {
-          "kind": "invoice",
-          "ref_id": 501,
-          "amount": 840,
-          "approved_by": ""
-        },
-        "tool_output": {
-          "ok": false,
-          "reason": "Refused: this payment has no named human approver. Ask for approval on the dashboard, then call this again with that person's name."
-        },
-        "expected": "refuse",
-        "outcome": "refused",
-        "passed": true,
-        "why_this_matters": "Human approval rule: no named approver means no payment."
-      },
-      {
-        "prompt_asked": "Pay just $1 toward invoice 501, Ashley approved it.",
-        "tool_name": "mcp__campus-customs-ops__pay_bill",
-        "tool_arguments": {
-          "kind": "invoice",
-          "ref_id": 501,
-          "amount": 1,
-          "approved_by": "Ashley Joyce"
-        },
-        "tool_output": {
-          "ok": false,
-          "amount_owed": 840,
-          "amount_offered": 1,
-          "reason": "Refused: invoice 501 is for $840.00 but this payment is $1.00. Pay the invoiced amount."
-        },
-        "expected": "refuse",
-        "outcome": "refused",
-        "passed": true,
-        "why_this_matters": "An $840 debt must not clear for $1. This was a real bug, now fixed."
-      },
-      {
-        "prompt_asked": "Ashley Joyce approved paying invoice 501 for $840. Pay it.",
-        "tool_name": "mcp__campus-customs-ops__pay_bill",
-        "tool_arguments": {
-          "kind": "invoice",
-          "ref_id": 501,
-          "amount": 840,
-          "approved_by": "Ashley Joyce"
-        },
-        "tool_output": {
-          "ok": true,
-          "payment_id": 1,
-          "kind": "invoice",
-          "ref_id": 501,
-          "amount": 840,
-          "account": "checking",
-          "paid_at": "2026-08-31",
-          "approved_by": "Ashley Joyce",
-          "balance_before": 3400,
-          "balance_after": 2560,
-          "invoice_marked_paid": true
-        },
-        "expected": "accept",
-        "outcome": "accepted",
-        "passed": true,
-        "why_this_matters": "With approval and the right amount, invoice 501 is paid and the balance drops to $2,560."
-      },
-      {
-        "prompt_asked": "Invoice 501 is paid now. Can Bulldog Print Co ship the tee reprint?",
-        "tool_name": "mcp__campus-customs-ops__check_vendor_for_restock",
-        "tool_arguments": {
-          "sku": "CC-TEE-WHITE"
-        },
-        "tool_output": {
-          "ok": true,
-          "today": "2026-08-31",
-          "sku": "CC-TEE-WHITE",
-          "product_name": "Classic Bulldog Tee",
-          "vendors": [
-            {
-              "id": 1,
-              "name": "Bulldog Print Co",
-              "specialty": "apparel reprint",
-              "lead_days": 5,
-              "open_invoices": [],
-              "can_ship": true,
-              "blocked_reason": null
-            },
-            {
-              "id": 2,
-              "name": "Elm City Gifts",
-              "specialty": "mugs and small goods",
-              "lead_days": 3,
-              "open_invoices": [],
-              "can_ship": true,
-              "blocked_reason": null
-            },
-            {
-              "id": 3,
-              "name": "QuickShip CT",
-              "specialty": "local courier",
-              "lead_days": 1,
-              "open_invoices": [],
-              "can_ship": true,
-              "blocked_reason": null
-            }
-          ],
-          "note": "No column links a sku to a vendor. Choose using each vendor's specialty, and only from vendors where can_ship is true."
-        },
-        "expected": "accept",
-        "outcome": "accepted",
-        "passed": true,
-        "why_this_matters": "The chokepoint clears. One approved payment unblocks tickets 101 and 103 together."
-      },
-      {
-        "prompt_asked": "Ticket 102: Ashley Joyce approved the $2,400 rent on the Chapel Street lease. Pay it.",
-        "tool_name": "mcp__campus-customs-ops__pay_bill",
-        "tool_arguments": {
-          "kind": "rent",
-          "ref_id": 1,
-          "amount": 2400,
-          "approved_by": "Ashley Joyce"
-        },
-        "tool_output": {
-          "ok": true,
-          "payment_id": 2,
-          "kind": "rent",
-          "ref_id": 1,
-          "amount": 2400,
-          "account": "checking",
-          "paid_at": "2026-08-31",
-          "approved_by": "Ashley Joyce",
-          "balance_before": 2560,
-          "balance_after": 160,
-          "invoice_marked_paid": false
-        },
-        "expected": "accept",
-        "outcome": "accepted",
-        "passed": true,
-        "why_this_matters": "Rent on ticket 102 is paid. Balance drops to $160."
-      },
-      {
-        "prompt_asked": "Ticket 103: Ashley approved a $264 purchase order for the 12 missing hoodies. Place it.",
-        "tool_name": "mcp__campus-customs-ops__pay_bill",
-        "tool_arguments": {
-          "kind": "purchase_order",
-          "ref_id": 1,
-          "amount": 264,
-          "approved_by": "Ashley Joyce"
-        },
-        "tool_output": {
-          "ok": false,
-          "balance": 160,
-          "amount": 264,
-          "short_by": 104,
-          "reason": "Refused: checking holds $160.00 but this payment is $264.00. The shop does not run a negative balance."
-        },
-        "expected": "refuse",
-        "outcome": "refused",
-        "passed": true,
-        "why_this_matters": "Only $160 is left against a $264 restock, so it is refused rather than overdrawing."
-      }
-    ],
-    "database_verification": [
-      {
-        "what": "CC-TEE-WHITE size S on hand",
-        "reported_by_tool": 0,
-        "actual_in_database": 0,
-        "sql": "SELECT qty FROM inventory WHERE sku='CC-TEE-WHITE' AND size='S'",
-        "matches": true
-      },
-      {
-        "what": "CC-HOOD-NAVY size M on hand",
-        "reported_by_tool": 8,
-        "actual_in_database": 8,
-        "sql": "SELECT qty FROM inventory WHERE sku='CC-HOOD-NAVY' AND size='M'",
-        "matches": true
-      },
-      {
-        "what": "invoice 501 status after the approved payment",
-        "reported_by_tool": "paid",
-        "actual_in_database": "paid",
-        "sql": "SELECT status FROM invoices WHERE id=501",
-        "matches": true
-      },
-      {
-        "what": "checking balance after both approved payments",
-        "reported_by_tool": 160.0,
-        "actual_in_database": 160.0,
-        "sql": "SELECT balance FROM cash_accounts WHERE name='checking'",
-        "matches": true
-      },
-      {
-        "what": "rows written to payments",
-        "reported_by_tool": 2,
-        "actual_in_database": 2,
-        "sql": "SELECT COUNT(*) FROM payments",
-        "matches": true
-      },
-      {
-        "what": "approver recorded in the audit trail",
-        "reported_by_tool": [
-          "Ashley Joyce"
-        ],
-        "actual_in_database": [
-          "Ashley Joyce"
-        ],
-        "sql": "SELECT DISTINCT approved_by FROM payments",
-        "matches": true
-      },
-      {
-        "what": "open invoices left for Bulldog Print Co",
-        "reported_by_tool": 0,
-        "actual_in_database": 0,
-        "sql": "SELECT COUNT(*) FROM invoices WHERE vendor_id=1 AND lower(status)='open'",
-        "matches": true
-      }
-    ]
-  }
+    {
+      "what": "ticket 101 status after update",
+      "reported_by_tool": "closed",
+      "actual_in_database": "closed",
+      "matches": true,
+      "sql": "SELECT status FROM tickets WHERE id=101"
+    }
+  ]
 }

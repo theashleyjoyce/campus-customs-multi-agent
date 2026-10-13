@@ -367,17 +367,19 @@ accepted or refused.
 The file also carries a `database_verification` section. After the run it
 re-reads `data/campus_customs_new.db` with direct SQL and compares it to what
 the tools reported, so the evidence is not just the server agreeing with
-itself. All 7 comparisons match:
+itself. All 9 comparisons match:
 
 | Checked | Tool said | Database holds |
 |---|---|---|
-| CC-TEE-WHITE size S on hand | 0 | 0 |
 | CC-HOOD-NAVY size M on hand | 8 | 8 |
-| invoice 501 status after payment | paid | paid |
-| checking balance after both payments | $160.00 | $160.00 |
-| rows written to `payments` | 2 | 2 |
+| CC-TEE-WHITE size S after the delivery | 1 | 1 |
+| checking balance after the approved payment | $2,560.00 | $2,560.00 |
+| invoice 501 status | paid | paid |
+| rows written to `payments` | 1 | 1 |
 | approver in the audit trail | Ashley Joyce | Ashley Joyce |
+| the approval closed to paid | paid | paid |
 | open invoices left for Bulldog Print Co | 0 | 0 |
+| ticket 101 status after update | closed | closed |
 
 ### Three more bugs the hunt found
 
