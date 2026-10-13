@@ -1,0 +1,17 @@
+# Virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets. The real key lives in the one .env at the workspace root.
+.env
+
+# The working copy is generated from campus_customs.db by --reset.
+data/campus_customs_new.db
+
+# Audit trail is run output, not source. Remove this line if the
+# submission should include a sample run.
+# output/audit_trail.json
+
+# macOS
+.DS_Store

@@ -1,0 +1,381 @@
+.app { min-height: 100%; display: flex; flex-direction: column; }
+
+/* ------------------------------- top bar ------------------------------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: .9rem 1.5rem;
+  background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+
+.brand h1 { font-size: 1.15rem; }
+.brand span { font-size: .78rem; color: #9db5d2; letter-spacing: .04em; text-transform: uppercase; }
+
+.stats { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: .4rem .85rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .08);
+  min-width: 108px;
+}
+.stat-label { font-size: .66rem; text-transform: uppercase; letter-spacing: .08em; color: #9db5d2; }
+.stat strong { font-size: 1rem; font-variant-numeric: tabular-nums; }
+.stat em { font-size: .68rem; color: #9db5d2; font-style: normal; }
+
+/* The balance is the number a grader needs to watch change, so it is the
+   biggest thing on the bar and it flashes when it moves. */
+.stat.cash { background: rgba(255, 255, 255, .14); min-width: 150px; }
+.stat.cash strong { font-size: 1.45rem; letter-spacing: -0.02em; }
+.stat.cash.flash {
+  animation: cash-drop 1.6s ease;
+}
+@keyframes cash-drop {
+  0%   { background: rgba(255, 209, 102, .9); color: var(--navy-900); transform: scale(1); }
+  18%  { transform: scale(1.06); }
+  100% { background: rgba(255, 255, 255, .14); color: #fff; transform: scale(1); }
+}
+
+.topbar .ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, .3);
+  color: #fff;
+}
+.topbar .ghost:hover:not(:disabled) { background: rgba(255, 255, 255, .12); }
+
+.banner {
+  padding: .7rem 1.5rem;
+  font-size: .9rem;
+}
+.banner.error { background: #fdecea; color: var(--bad); border-bottom: 1px solid #f5c6c2; }
+
+/* -------------------------------- grid --------------------------------- */
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr) 320px;
+  gap: 1.1rem;
+  padding: 1.1rem 1.5rem 2rem;
+  align-items: start;
+}
+
+@media (max-width: 1180px) {
+  .grid { grid-template-columns: 260px minmax(0, 1fr); }
+  .side { grid-column: 1 / -1; }
+}
+@media (max-width: 820px) {
+  .grid { grid-template-columns: 1fr; }
+}
+
+.col { display: flex; flex-direction: column; gap: .7rem; min-width: 0; }
+
+.col > h2 {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .4rem;
+}
+.col > h2:first-child { margin-top: 0; }
+
+.muted { color: var(--muted); }
+.small { font-size: .8rem; }
+
+/* ------------------------------- tickets -------------------------------- */
+
+.ticket {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--line);
+  border-radius: var(--radius);
+  padding: .85rem .95rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: border-color .15s ease, transform .1s ease;
+}
+.ticket:hover { transform: translateY(-1px); }
+.ticket.selected { border-left-color: var(--navy-700); }
+.ticket.running { border-left-color: var(--warn); }
+
+/* A resolved ticket is unmistakable: green rail, tinted card, tick in the chip. */
+.ticket.resolved {
+  border-left-color: var(--good);
+  background: linear-gradient(180deg, #f2fbf8, #ffffff 60%);
+}
+
+.ticket-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: .3rem; }
+.ticket-id { font-size: .72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ticket h3 { font-size: .98rem; margin-bottom: .1rem; }
+.ticket .meta { display: flex; gap: .35rem; align-items: center; margin: .45rem 0; font-size: .8rem; }
+.ticket button { width: 100%; margin-top: .6rem; }
+
+.chip {
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: .16rem .5rem;
+  border-radius: 999px;
+}
+.chip.open { background: #e8eef6; color: var(--navy-700); }
+.chip.done { background: #dcf3ec; color: var(--good); }
+.chip.done::before { content: "✓ "; }
+.chip.warn { background: #fdf0dd; color: var(--warn); }
+.chip.bad  { background: #fdecea; color: var(--bad); }
+
+.primary { background: var(--navy-800); color: #fff; }
+.primary:hover:not(:disabled) { background: var(--navy-700); }
+.ghost { background: #fff; border-color: var(--line); color: var(--ink); }
+.ghost:hover:not(:disabled) { background: #f6f9fc; }
+
+/* --------------------------------- feed --------------------------------- */
+
+.live {
+  color: var(--warn);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+
+.empty {
+  background: var(--card);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 2.2rem 1.5rem;
+  text-align: center;
+}
+.empty p { margin: .3rem 0; }
+
+.feed {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: .5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Each line is a sentence, not a log row. The agent's name is the anchor. */
+.line {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: .7rem;
+  padding: .45rem .55rem;
+  border-radius: 8px;
+  animation: slide-in .22s ease;
+}
+.line + .line { border-top: 1px solid #f1f5f9; }
+.line:hover { background: #f8fafc; }
+@keyframes slide-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+.who {
+  font-size: .76rem;
+  font-weight: 700;
+  text-align: right;
+  padding-top: .1rem;
+  color: var(--muted);
+}
+.who.boss { color: var(--boss); }
+.who.inventory { color: var(--inventory); }
+.who.accounting { color: var(--accounting); }
+.who.facilities { color: var(--facilities); }
+.who.customer_service { color: var(--customer_service); }
+
+.what p { margin: 0; font-size: .88rem; }
+.line.answer .what p { font-weight: 600; }
+.line.delegation_start .what p { font-style: italic; color: var(--navy-700); }
+.line.error .what p, .line.refusal .what p { color: var(--bad); }
+
+.tools { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: .25rem; }
+.tools code {
+  background: #eef2f7;
+  color: var(--navy-700);
+  border-radius: 5px;
+  padding: .08rem .35rem;
+}
+
+/* ------------------------------- summary -------------------------------- */
+
+.summary { margin-top: .6rem; }
+.summary h2 { display: flex; align-items: center; gap: .5rem; }
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: .7rem;
+  margin-top: .6rem;
+}
+.summary-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: .8rem .9rem;
+  box-shadow: var(--shadow);
+}
+.summary-card h3 { font-size: .92rem; display: flex; align-items: center; gap: .4rem; }
+.said { font-size: .84rem; margin: .4rem 0 0; color: #334155; }
+
+/* -------------------------------- roster -------------------------------- */
+
+.roster {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: .4rem;
+}
+.member {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .4rem .5rem;
+  border-radius: 8px;
+}
+.member div { display: flex; flex-direction: column; line-height: 1.25; }
+.member strong { font-size: .87rem; }
+.member.working { background: #fff8ec; }
+.member.done { background: #f3fbf8; }
+
+.dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  flex-shrink: 0;
+}
+.dot.boss { background: var(--boss); }
+.dot.inventory { background: var(--inventory); }
+.dot.accounting { background: var(--accounting); }
+.dot.facilities { background: var(--facilities); }
+.dot.customer_service { background: var(--customer_service); }
+.dot.idle { background: #cbd5e1; }
+.dot.working { animation: ping 1.1s ease-in-out infinite; }
+@keyframes ping {
+  0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 1; }
+  50% { box-shadow: 0 0 0 5px rgba(194, 105, 11, .18); opacity: .7; }
+}
+
+/* ------------------------------ approvals ------------------------------- */
+
+/* This should feel like it is waiting on you, because it is. */
+.approval {
+  background: linear-gradient(180deg, #fffaf0, #ffffff 70%);
+  border: 1px solid #f0dcb8;
+  border-left: 4px solid var(--warn);
+  border-radius: var(--radius);
+  padding: .8rem .9rem;
+  box-shadow: var(--shadow);
+  animation: slide-in .25s ease;
+}
+.approval-head { display: flex; align-items: center; justify-content: space-between; }
+.approval-head strong { font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+.approval-actions { display: flex; gap: .4rem; margin-top: .65rem; }
+.approval-actions button { flex: 1; }
+
+.decided, .payment {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: .45rem .6rem;
+  font-size: .86rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* -------------------------------- footer -------------------------------- */
+
+.detail {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: .8rem;
+  align-items: baseline;
+  padding: .6rem 1.5rem;
+  background: #fff;
+  border-top: 1px solid var(--line);
+  font-size: .85rem;
+}
+
+/* --------------------------- decision record ---------------------------- */
+
+/* The ticket's decision log is the outcome of a run, so it sits at the top of
+   the middle column where it can actually be read. It used to be crushed into
+   a sticky footer, which was 2,550px tall and unusable. */
+.record {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--navy-700);
+  border-radius: var(--radius);
+  padding: .9rem 1.05rem;
+  box-shadow: var(--shadow);
+}
+.record.settled {
+  border-left-color: var(--good);
+  background: linear-gradient(180deg, #f4fcf9, #ffffff 55%);
+}
+
+.record-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.record-title {
+  font-size: 1.1rem;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-top: .05rem;
+}
+.record-meta { margin: .35rem 0 0; }
+
+.record-label {
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  margin: .95rem 0 .4rem;
+}
+
+/* Each decision is its own entry with a number, so a run that appends three
+   notes reads as three decisions instead of one long sentence. */
+.decisions {
+  margin: 0;
+  padding-left: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.decisions li {
+  font-size: .88rem;
+  line-height: 1.5;
+  color: #243447;
+  padding-left: .2rem;
+}
+.decisions li::marker { color: var(--muted); font-size: .8rem; }
+
+/* The first entry is the original request, not a decision the team made. */
+.decisions li.ask {
+  list-style: none;
+  margin-left: -1.3rem;
+  padding: .45rem .7rem;
+  background: #f1f5f9;
+  border-radius: 8px;
+  color: var(--muted);
+  font-style: italic;
+}

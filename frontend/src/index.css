@@ -1,0 +1,57 @@
+:root {
+  /* Yale navy, warmed slightly so it reads like a shop and not a bank. */
+  --navy-900: #0a1f3a;
+  --navy-800: #102a4c;
+  --navy-700: #16375f;
+  --ink: #16202e;
+  --muted: #64748b;
+  --line: #dde5ee;
+  --bg: #eef2f7;
+  --card: #ffffff;
+
+  /* One colour per agent. The same hue is used for its dot, its name in the
+     feed and its summary card, so you can track an agent by colour alone. */
+  --boss: #d4328c;
+  --inventory: #0e8a6a;
+  --accounting: #c2690b;
+  --facilities: #6b4fd6;
+  --customer_service: #1d7fd4;
+
+  --good: #0e8a6a;
+  --warn: #c2690b;
+  --bad: #c0392b;
+
+  --shadow: 0 1px 2px rgba(16, 42, 76, .06), 0 4px 16px rgba(16, 42, 76, .06);
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0; letter-spacing: -0.01em; }
+
+button {
+  font: inherit;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: .5rem .9rem;
+  cursor: pointer;
+  transition: transform .08s ease, background .15s ease, box-shadow .15s ease;
+}
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+
+code, .mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .82em;
+}
